@@ -8,6 +8,7 @@ import { servicesData, successStoriesData } from "@data/mega_link";
   class="hs-dropdown py-3 [--adaptive:none] [--strategy:static] md:px-3 md:py-4 md:[--strategy:absolute] md:[--trigger:hover]"
 >
   <button
+    id="services"
     type="button"
     class="flex w-full text-base items-center font-medium text-neutral-600 hover:text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-500"
   >
@@ -93,3 +94,25 @@ import { servicesData, successStoriesData } from "@data/mega_link";
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let url = window.location.pathname;
+    
+    // Check if current page is services or starts with /services
+    if (url === "/services" || url.startsWith("/services/")) {
+      let servicesButton = document.getElementById("services");
+      
+      if (servicesButton) {
+        servicesButton.classList.remove(
+          "text-neutral-600",
+          "dark:text-neutral-400",
+          "hover:text-neutral-500",
+          "dark:hover:text-neutral-500"
+        );
+        servicesButton.classList.add("text-black", "dark:text-white", "line-through");
+        servicesButton.setAttribute("aria-current", "page");
+      }
+    }
+  });
+</script>
