@@ -106,6 +106,50 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
     </div>
   </nav>
 </header>
+
+<!-- Script to highlight active navigation link -->
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    let url = window.location.pathname;
+    let navId;
+
+    if (url === "/") {
+      navId = "home";
+    } else {
+      navId = url.replace("/", "");
+    }
+
+    let nav = document.getElementById(navId);
+
+    if (nav) {
+      nav.classList.remove(
+        "text-neutral-600",
+        "dark:text-neutral-400",
+        "hover:text-neutral-500",
+        "dark:hover:text-neutral-500"
+      );
+      nav.classList.add("text-black", "dark:text-white", "line-through");
+      nav.setAttribute("aria-current", "page");
+    }
+
+    // Check if current page is services or starts with /services
+    if (url === "/services" || url.startsWith("/services/")) {
+      let servicesButton = document.getElementById("services");
+      
+      if (servicesButton) {
+        servicesButton.classList.remove(
+          "text-neutral-600",
+          "dark:text-neutral-400",
+          "hover:text-neutral-500",
+          "dark:hover:text-neutral-500"
+        );
+        servicesButton.classList.add("text-black", "dark:text-white", "line-through");
+        servicesButton.setAttribute("aria-current", "page");
+      }
+    }
+  });
+</script>
+
 <!-- Theme Appearance script to manage light/dark modes -->
 <script is:inline>
   const HSThemeAppearance = {

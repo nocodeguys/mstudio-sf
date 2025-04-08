@@ -94,25 +94,3 @@ import { servicesData, successStoriesData } from "@data/mega_link";
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    let url = window.location.pathname;
-    
-    // Check if current page is services or starts with /services
-    if (url === "/services" || url.startsWith("/services/")) {
-      let servicesButton = document.getElementById("services");
-      
-      if (servicesButton) {
-        servicesButton.classList.remove(
-          "text-neutral-600",
-          "dark:text-neutral-400",
-          "hover:text-neutral-500",
-          "dark:hover:text-neutral-500"
-        );
-        servicesButton.classList.add("text-black", "dark:text-white", "line-through");
-        servicesButton.setAttribute("aria-current", "page");
-      }
-    }
-  });
-</script>

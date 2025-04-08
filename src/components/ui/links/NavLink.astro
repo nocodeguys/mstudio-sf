@@ -23,29 +23,3 @@ If URL is '/' (home page), assign ID as 'home'
 >
   {name}
 </a>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    let url = window.location.pathname;
-    let navId;
-
-    if (url === "/") {
-      navId = "home";
-    } else {
-      navId = url.replace("/", "");
-    }
-
-    let nav = document.getElementById(navId);
-
-    if (nav) {
-      nav.classList.remove(
-        "text-neutral-600",
-        "dark:text-neutral-400",
-        "hover:text-neutral-500",
-        "dark:hover:text-neutral-500"
-      );
-      nav.classList.add("text-black", "dark:text-white", "line-through");
-      nav.setAttribute("aria-current", "page");
-    }
-  });
-</script>
