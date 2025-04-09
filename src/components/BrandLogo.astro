@@ -1,5 +1,12 @@
-<img 
+---
+import { Image } from 'astro:assets';
+import logoBlack from '@images/logo-black.svg';
+---
+
+<Image 
   {...Astro.props} 
-  src="/src/images/logo-black.svg" 
+  src={logoBlack} 
   alt="Brand Logo" 
+  width={150}
+  height={40}
 />

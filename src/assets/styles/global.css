@@ -158,14 +158,14 @@
   body {
     background-color: var(--color-white, #ffffff);
     color: var(--color-black, #010101);
-    font-family: "Inter var", sans-serif;
+    font-family: "Questrial", "Inter var", sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
+    font-weight: 300;
     letter-spacing: -0.025em;
     color: var(--color-black, #010101);
-    font-family: "Cal Sans", "Inter var", sans-serif;
+    font-family: "Questrial", "Inter var", sans-serif;
   }
 
   h1 {
@@ -333,6 +333,10 @@
   
   .text-pretty {
     text-wrap: pretty;
+  }
+
+  .font-questrial {
+    font-family: "Questrial", sans-serif;
   }
 }
 
