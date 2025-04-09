@@ -78,12 +78,12 @@ interface Props {
   </div>
   <!-- Hero Image Section -->
   <div class="flex w-full">
-      <div class="top-12 overflow-hidden">
+      <div class="top-12 overflow-hidden rounded-[var(--radius-lg)]">
 	{src && alt &&
 	<Image
         src={src}
         alt={alt}
-        class="h-full w-full scale-110 object-cover object-center"
+        class="h-full w-full scale-110 object-cover object-center rounded-[var(--radius-lg)]"
         draggable={"false"}
         loading={"eager"}
         format={"avif"}
