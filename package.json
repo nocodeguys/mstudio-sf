@@ -5,11 +5,14 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build && node process-html.mjs",
+    "build": "mkdir -p public/src/images && cp src/images/logo-black.svg public/src/images/ && astro check && astro build && node process-html.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint . --ext .js,.ts,.astro",
-    "lint:fix": "eslint . --ext .js,.ts,.astro --fix"
+    "lint:fix": "eslint . --ext .js,.ts,.astro --fix",
+    "netlify": "netlify",
+    "netlify:dev": "netlify dev",
+    "netlify:build": "netlify build"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -40,6 +43,7 @@
     "eslint-plugin-astro": "^0.31.3",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
+    "netlify-cli": "^20.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.11",

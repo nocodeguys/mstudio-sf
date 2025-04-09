@@ -13,11 +13,13 @@ export default defineConfig({
   image: {
     domains: ["images.unsplash.com"],
   },
+  // Comment out the Astro i18n config since we're using Starlight's
   // i18n: {
   //   defaultLocale: "pl",
-  //   locales: ["pl", "en"],
+  //   locales: ["pl", "en", "fr"],
   //   fallback: {
   //     en: "pl",
+  //     fr: "pl",
   //   },
   //   routing: {
   //     prefixDefaultLocale: false,
@@ -30,6 +32,7 @@ export default defineConfig({
       locales: {
         pl: "pl", // The `defaultLocale` value must present in `locales` keys
         en: "en",
+        fr: "fr", // Add French locale
       },
     },
   }), starlight({
@@ -46,6 +49,7 @@ export default defineConfig({
         lang: "pl",
       },
       en: { label: "English", lang: "en" },
+      fr: { label: "Français", lang: "fr" }, // Add French locale
     },
     // https://starlight.astro.build/guides/sidebar/
     sidebar: [
