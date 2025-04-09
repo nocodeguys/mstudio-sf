@@ -1,4 +1,4 @@
 export const languages = {
+    pl: "Polski",
     en: "English",
-    fr: "Français",
 };

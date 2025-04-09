@@ -14,10 +14,10 @@ export default defineConfig({
     domains: ["images.unsplash.com"],
   },
   // i18n: {
-  //   defaultLocale: "en",
-  //   locales: ["en", "fr"],
+  //   defaultLocale: "pl",
+  //   locales: ["pl", "en"],
   //   fallback: {
-  //     fr: "en",
+  //     en: "pl",
   //   },
   //   routing: {
   //     prefixDefaultLocale: false,
@@ -26,10 +26,10 @@ export default defineConfig({
   prefetch: true,
   integrations: [sitemap({
     i18n: {
-      defaultLocale: "en", // All urls that don't contain `fr` after `https://screwfast.uk/` will be treated as default locale, i.e. `en`
+      defaultLocale: "pl", // All urls that don't contain `en` after `https://screwfast.uk/` will be treated as default locale, i.e. `pl`
       locales: {
-        en: "en", // The `defaultLocale` value must present in `locales` keys
-        fr: "fr",
+        pl: "pl", // The `defaultLocale` value must present in `locales` keys
+        en: "en",
       },
     },
   }), starlight({
@@ -42,27 +42,17 @@ export default defineConfig({
     // If both an Astro and Starlight i18n configurations are provided, an error is thrown.
     locales: {
       root: {
-        label: "English",
-        lang: "en",
+        label: "Polski",
+        lang: "pl",
       },
-      de: { label: "Deutsch", lang: "de" },
-      es: { label: "Español", lang: "es" },
-      fa: { label: "Persian", lang: "fa", dir: "rtl" },
-      fr: { label: "Français", lang: "fr" },
-      ja: { label: "日本語", lang: "ja" },
-      "zh-cn": { label: "简体中文", lang: "zh-CN" },
+      en: { label: "English", lang: "en" },
     },
     // https://starlight.astro.build/guides/sidebar/
     sidebar: [
       {
-        label: "Quick Start Guides",
+        label: "Szybki Start",
         translations: {
-          de: "Schnellstartanleitungen",
-          es: "Guías de Inicio Rápido",
-          fa: "راهنمای شروع سریع",
-          fr: "Guides de Démarrage Rapide",
-          ja: "クイックスタートガイド",
-          "zh-cn": "快速入门指南",
+          en: "Quick Start Guides",
         },
         autogenerate: { directory: "guides" },
       },
