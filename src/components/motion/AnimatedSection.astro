@@ -1,0 +1,36 @@
+---
+import MotionDiv from "../react/MotionDiv";
+
+interface Props {
+  className?: string;
+  delay?: number;
+  duration?: number;
+  direction?: 'up' | 'down' | 'left' | 'right';
+  distance?: number;
+  once?: boolean;
+  blurAmount?: number;
+}
+
+const { 
+  className = '', 
+  delay = 0, 
+  duration = 0.7,
+  direction = 'up',
+  distance = 15,
+  once = true,
+  blurAmount = 4
+} = Astro.props;
+---
+
+<MotionDiv
+  className={className}
+  delay={delay}
+  duration={duration}
+  direction={direction}
+  distance={distance}
+  once={once}
+  blurAmount={blurAmount}
+  client:visible
+>
+  <slot />
+</MotionDiv> 

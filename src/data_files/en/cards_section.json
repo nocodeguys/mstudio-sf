@@ -1,0 +1,30 @@
+{
+  "section_title": "Our Services",
+  "section_subtitle": "Comprehensive solutions tailored to your needs",
+  "cards": [
+    {
+      "title": "Web Design",
+      "description": "I create websites that stand out from the competition and effectively attract customers.",
+      "button_text": "Learn more",
+      "button_url": "/services",
+      "image_path": "/images/web-design.webp",
+      "image_alt": "Screen with website design"
+    },
+    {
+      "title": "Mobile Applications",
+      "description": "I design and develop mobile applications that deliver exceptional user experiences and achieve business goals.",
+      "button_text": "See details",
+      "button_url": "/services",
+      "image_path": "/images/mobile-app.webp",
+      "image_alt": "Phone with mobile application"
+    },
+    {
+      "title": "Branding & Identity",
+      "description": "I create consistent visual identity that builds brand recognition and trust among customers.",
+      "button_text": "Check offer",
+      "button_url": "/services",
+      "image_path": "/images/branding.webp",
+      "image_alt": "Brand identity elements"
+    }
+  ]
+} 

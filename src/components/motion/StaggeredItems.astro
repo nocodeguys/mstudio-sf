@@ -1,0 +1,36 @@
+---
+import MotionStagger from "../react/MotionStagger";
+
+interface Props {
+  className?: string;
+  containerTag?: 'div' | 'ul' | 'ol';
+  staggerDelay?: number;
+  initialDelay?: number;
+  duration?: number;
+  once?: boolean;
+  blurAmount?: number;
+}
+
+const { 
+  className = '', 
+  containerTag = 'div',
+  staggerDelay = 0.08,
+  initialDelay = 0.2,
+  duration = 0.7,
+  once = true,
+  blurAmount = 3
+} = Astro.props;
+---
+
+<MotionStagger
+  className={className}
+  containerTag={containerTag}
+  staggerDelay={staggerDelay}
+  initialDelay={initialDelay}
+  duration={duration}
+  once={once}
+  blurAmount={blurAmount}
+  client:visible
+>
+  <slot />
+</MotionStagger> 

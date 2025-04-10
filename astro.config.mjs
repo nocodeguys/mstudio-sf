@@ -3,7 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import compressor from "astro-compressor";
 import starlight from "@astrojs/starlight";
-
+import react from "@astrojs/react";
 import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
@@ -26,7 +26,9 @@ export default defineConfig({
   //   },
   // },
   prefetch: true,
-  integrations: [sitemap({
+  integrations: [
+    react(),
+    sitemap({
     i18n: {
       defaultLocale: "pl", // All urls that don't contain `en` after `https://screwfast.uk/` will be treated as default locale, i.e. `pl`
       locales: {

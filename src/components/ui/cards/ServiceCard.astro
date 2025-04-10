@@ -1,0 +1,51 @@
+---
+// Import required components and utilities
+import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
+
+// Define interface for props
+interface Props {
+  title: string;
+  description: string;
+  buttonText: string;
+  buttonUrl: string;
+  imagePath: string;
+  imageAlt: string;
+  reversed?: boolean;
+}
+
+// Get props from Astro
+const { 
+  title, 
+  description, 
+  buttonText, 
+  buttonUrl, 
+  imagePath, 
+  imageAlt, 
+  reversed = false 
+} = Astro.props;
+---
+
+<div class={`flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition-all duration-300 hover:shadow-md dark:bg-neutral-800 md:flex-row ${reversed ? 'md:flex-row-reverse' : ''}`}>
+  <!-- Image container -->
+  <div class="relative h-60 w-full md:h-auto md:w-2/5">
+    <img 
+      src={imagePath} 
+      alt={imageAlt} 
+      class="h-full w-full object-cover object-center"
+      loading="lazy"
+    />
+  </div>
+  
+  <!-- Content container -->
+  <div class="flex flex-1 flex-col justify-center p-6 md:p-8">
+    <h3 class="mb-3 text-xl font-bold text-neutral-800 dark:text-neutral-200 md:text-2xl">
+      {title}
+    </h3>
+    <p class="mb-5 text-neutral-600 dark:text-neutral-400">
+      {description}
+    </p>
+    <div class="mt-auto">
+      <PrimaryCTA title={buttonText} url={buttonUrl} />
+    </div>
+  </div>
+</div> 

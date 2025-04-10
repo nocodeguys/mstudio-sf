@@ -1,0 +1,30 @@
+{
+  "section_title": "Nasze usługi",
+  "section_subtitle": "Kompleksowe rozwiązania dostosowane do Twoich potrzeb",
+  "cards": [
+    {
+      "title": "Design stron internetowych",
+      "description": "Tworzę strony internetowe, które wyróżniają się na tle konkurencji i skutecznie przyciągają klientów.",
+      "button_text": "Dowiedz się więcej",
+      "button_url": "/services",
+      "image_path": "src/images/webdev.avif",
+      "image_alt": "Ekran z projektem strony internetowej"
+    },
+    {
+      "title": "Aplikacje mobilne",
+      "description": "Projektuję i rozwijam aplikacje mobilne, które dostarczają wyjątkowe doświadczenia użytkownikom i realizują cele biznesowe.",
+      "button_text": "Poznaj szczegóły",
+      "button_url": "/services",
+      "image_path": "/images/mobile-app.webp",
+      "image_alt": "Telefon z aplikacją mobilną"
+    },
+    {
+      "title": "Branding i identyfikacja",
+      "description": "Tworzę spójną identyfikację wizualną, która buduje rozpoznawalność marki i zaufanie wśród klientów.",
+      "button_text": "Sprawdź ofertę",
+      "button_url": "/services",
+      "image_path": "/images/branding.webp",
+      "image_alt": "Elementy identyfikacji wizualnej marki"
+    }
+  ]
+} 

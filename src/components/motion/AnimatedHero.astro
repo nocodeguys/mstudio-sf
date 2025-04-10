@@ -1,0 +1,30 @@
+---
+import HeroMotion from "../react/HeroMotion";
+
+interface Props {
+  className?: string;
+  delay?: number;
+  staggerDelay?: number;
+  duration?: number;
+  blurAmount?: number;
+}
+
+const { 
+  className = '', 
+  delay = 0.2, 
+  staggerDelay = 0.15,
+  duration = 1,
+  blurAmount = 3
+} = Astro.props;
+---
+
+<HeroMotion
+  className={className}
+  delay={delay}
+  staggerDelay={staggerDelay}
+  duration={duration}
+  blurAmount={blurAmount}
+  client:only="react"
+>
+  <slot />
+</HeroMotion> 
