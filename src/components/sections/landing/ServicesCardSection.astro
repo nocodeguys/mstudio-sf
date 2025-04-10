@@ -1,6 +1,20 @@
 ---
 import ServiceCard from "@components/ui/cards/ServiceCard.astro";
 import StaggeredItems from "@components/motion/StaggeredItems.astro";
+import type { ImageMetadata } from "astro";
+
+// Import images directly in the component
+import webdevImage from "@images/webdevv.avif";
+import designImage from "@images/design.avif";
+import automationImage from "@images/automation.avif";
+
+// Map for image paths to imported images
+const imageImports: Record<string, ImageMetadata> = {
+  "src/images/webdevv.avif": webdevImage,
+  "src/images/design.avif": designImage,
+  "src/images/automation.avif": automationImage,
+  // Add other images as needed when they appear in your data
+};
 
 interface CardData {
   title: string;
@@ -37,21 +51,29 @@ const { title, subtitle, cards } = Astro.props;
 
       <!-- Cards container -->
       <div class="space-y-20 md:space-y-32">
-        {cards.map((card, index) => (
-          <StaggeredItems staggerDelay={0} initialDelay={0.1} duration={1} blurAmount={5}>
-            <div class="py-4">
-              <ServiceCard
-                title={card.title}
-                description={card.description}
-                buttonText={card.button_text}
-                buttonUrl={card.button_url}
-                imagePath={card.image_path}
-                imageAlt={card.image_alt}
-                reversed={index % 2 !== 0}
-              />
-            </div>
-          </StaggeredItems>
-        ))}
+        {cards.map((card, index) => {
+          // Get the imported image based on the path from the data file
+          const importedImage = imageImports[card.image_path];
+          
+          // Handle the case when an image path is in the public folder
+          const isPublicImage = card.image_path.startsWith('/');
+          
+          return (
+            <StaggeredItems staggerDelay={0} initialDelay={0.1} duration={1} blurAmount={5}>
+              <div class="py-4">
+                <ServiceCard
+                  title={card.title}
+                  description={card.description}
+                  buttonText={card.button_text}
+                  buttonUrl={card.button_url}
+                  imagePath={isPublicImage ? card.image_path : (importedImage || '')}
+                  imageAlt={card.image_alt}
+                  reversed={index % 2 !== 0}
+                />
+              </div>
+            </StaggeredItems>
+          );
+        })}
       </div>
     </div>
   </div>

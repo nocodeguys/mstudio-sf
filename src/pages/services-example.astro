@@ -1,0 +1,78 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import ServiceCard from "@components/ui/cards/ServiceCard.astro";
+
+// Import images directly from the src/images directory
+import webdevImage from "@images/webdevv.avif";
+import designImage from "@images/design.avif";
+import automationImage from "@images/automation.avif";
+
+// Define services with both imported images and public URLs
+const services = [
+  {
+    title: "Web Design",
+    description: "I create websites that stand out from the competition and effectively attract customers.",
+    buttonText: "Learn more",
+    buttonUrl: "/services",
+    image: webdevImage, // Imported image (ImageMetadata)
+    imageAlt: "Screen with website design"
+  },
+  {
+    title: "Design That Tells a Story",
+    description: "I don't just create designs. I create experiences that reflect your brand identity.",
+    buttonText: "How it works",
+    buttonUrl: "/services",
+    image: designImage, // Imported image (ImageMetadata)
+    imageAlt: "Design elements"
+  },
+  {
+    title: "Automation for Business Scaling",
+    description: "I help implement tools that streamline your business processes, saving time and resources.",
+    buttonText: "What can I automate?",
+    buttonUrl: "/services",
+    image: automationImage, // Imported image (ImageMetadata)
+    imageAlt: "Automation elements"
+  },
+  {
+    title: "Public Image Example",
+    description: "This example uses an image from the public directory (not optimized by Astro's Image component).",
+    buttonText: "Learn more",
+    buttonUrl: "/services",
+    image: "/images/web-design.webp", // Public URL string
+    imageAlt: "Web design example"
+  }
+];
+---
+
+<MainLayout title="Services Example - Using Astro Image">
+  <div class="py-12 md:py-16 lg:py-20">
+    <div class="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 2xl:max-w-full">
+      <div class="rounded-3xl bg-neutral-900 px-4 py-10 dark:bg-white sm:px-6 lg:px-8">
+        <div class="mx-auto mb-10 max-w-2xl text-center md:mb-16">
+          <h2 class="text-3xl font-bold tracking-tight text-white dark:text-neutral-800 sm:text-4xl">
+            Services - Image Examples
+          </h2>
+          <p class="mt-3 text-xl text-neutral-200 dark:text-neutral-600">
+            Demonstrates both imported images (optimized) and URL paths (standard)
+          </p>
+        </div>
+
+        <div class="space-y-20 md:space-y-32">
+          {services.map((service, index) => (
+            <div class="py-4">
+              <ServiceCard
+                title={service.title}
+                description={service.description}
+                buttonText={service.buttonText}
+                buttonUrl={service.buttonUrl}
+                imagePath={service.image}
+                imageAlt={service.imageAlt}
+                reversed={index % 2 !== 0}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout> 

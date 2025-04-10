@@ -1,6 +1,8 @@
 ---
 // Import required components and utilities
 import LinkButton from "@components/ui/buttons/LinkButton.astro";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
 // Define interface for props
 interface Props {
@@ -8,7 +10,7 @@ interface Props {
   description: string;
   buttonText: string;
   buttonUrl: string;
-  imagePath: string;
+  imagePath: ImageMetadata | string;
   imageAlt: string;
   reversed?: boolean;
 }
@@ -23,17 +25,38 @@ const {
   imageAlt, 
   reversed = false 
 } = Astro.props;
+
+// Check if imagePath is a string (likely a URL) or an ImageMetadata object
+const isStringPath = typeof imagePath === 'string';
+
+// External URLs should be strings (like https://example.com/image.jpg or /public/image.jpg)
+// Local imported images should be ImageMetadata objects
 ---
 
 <div class={`flex flex-col overflow-hidden rounded-xl bg-neutral-800 shadow-sm transition-all duration-300 hover:shadow-md dark:bg-neutral-100 md:flex-row ${reversed ? 'md:flex-row-reverse' : ''} mx-auto max-w-[85rem] p-8 sm:p-10 lg:p-12 2xl:max-w-full my-8`}>
   <!-- Image container -->
   <div class="relative h-60 w-full md:h-auto md:w-2/5">
-    <img 
-      src={imagePath} 
-      alt={imageAlt} 
-      class="h-full w-full object-cover object-center rounded-xl"
-      loading="lazy"
-    />
+    {isStringPath ? (
+      // For public image paths or remote URLs
+      <img 
+        src={imagePath} 
+        alt={imageAlt} 
+        class="h-full w-full object-cover object-center rounded-xl"
+        loading="lazy"
+      />
+    ) : (
+      // For imported images (ImageMetadata)
+      <Image 
+        src={imagePath} 
+        alt={imageAlt} 
+        class="h-full w-full object-cover object-center rounded-xl"
+        loading="lazy"
+        format="avif"
+        draggable="false"
+        width={800}
+        height={600}
+      />
+    )}
   </div>
   
   <!-- Content container -->
