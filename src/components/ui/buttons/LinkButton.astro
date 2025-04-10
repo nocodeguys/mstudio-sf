@@ -1,0 +1,42 @@
+---
+// Define TypeScript interface for the properties
+interface Props {
+  title?: string;
+  url?: string;
+  variant?: 'primary' | 'secondary' | 'outline';
+}
+
+// Get props from Astro
+const { title, url, variant = 'primary' } = Astro.props;
+
+// Base classes shared by all variants
+const baseClasses = "inline-flex items-center justify-center gap-x-2 rounded-lg px-4 py-3 text-sm font-medium transition duration-300 outline-hidden ring-zinc-500 focus-visible:ring-3 hover:translate-y-[-1px] dark:ring-zinc-200";
+
+// Variant-specific classes
+const variantClasses = {
+  primary: "bg-transparent text-white hover:text-neutral-300 dark:text-neutral-800 dark:hover:text-neutral-600",
+  secondary: "bg-transparent text-neutral-200 hover:text-white dark:text-neutral-600 dark:hover:text-neutral-800",
+  outline: "bg-transparent border border-neutral-200 text-neutral-200 hover:text-white dark:border-neutral-600 dark:text-neutral-600 dark:hover:text-neutral-800"
+};
+
+const classes = `${baseClasses} ${variantClasses[variant]}`;
+---
+
+<a
+  href={url}
+  class={classes}
+>
+  {title}
+  <svg 
+    class="size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" 
+    xmlns="http://www.w3.org/2000/svg" 
+    viewBox="0 0 20 20" 
+    fill="currentColor"
+  >
+    <path 
+      fill-rule="evenodd" 
+      d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" 
+      clip-rule="evenodd"
+    />
+  </svg>
+</a> 

@@ -1,29 +1,29 @@
 {
-  "section_title": "Nasze usługi",
+  "section_title": "Co mogę dla Ciebie zrobić?",
   "section_subtitle": "Kompleksowe rozwiązania dostosowane do Twoich potrzeb",
   "cards": [
     {
-      "title": "Design stron internetowych",
-      "description": "Tworzę strony internetowe, które wyróżniają się na tle konkurencji i skutecznie przyciągają klientów.",
-      "button_text": "Dowiedz się więcej",
+      "title": "Stwórzmy razem stronę dla Twojego biznesu w technologii no-code",
+      "description": "Potrzebujesz strony internetowej, serwisu, platformy? Albo małej aplikacji, która dzięki narzędziom no-code powstanie w ciągu tygodnia? Możesz mieć w pełni sprawny produkt, który pomoże zrealizować Twoje cele biznesowe już po miesiącu współpracy. Sprawdź, jak to działa!",
+      "button_text": "Ile to kosztuje?",
       "button_url": "/services",
-      "image_path": "src/images/webdev.avif",
+      "image_path": "src/images/webdevv.avif",
       "image_alt": "Ekran z projektem strony internetowej"
     },
     {
-      "title": "Aplikacje mobilne",
-      "description": "Projektuję i rozwijam aplikacje mobilne, które dostarczają wyjątkowe doświadczenia użytkownikom i realizują cele biznesowe.",
-      "button_text": "Poznaj szczegóły",
+      "title": "Design który opowiada historię",
+      "description": "Nie tworzę designów. Tworzę doświadczenia, które oddają tożsamość Twojej marki. Design to nie tylko wygląd - to przestrzeń ekspresji, sposób na opowiedzenie Twojej historii i zbudowanie relacji z klientami. Razem odkryjmy co sprawia, że Twój biznes jest wyjątkowy i przekujmy to w niezapomniany projekt.",
+      "button_text": "Jak to działa?",
       "button_url": "/services",
-      "image_path": "/images/mobile-app.webp",
+      "image_path": "src/images/design.avif",
       "image_alt": "Telefon z aplikacją mobilną"
     },
     {
-      "title": "Branding i identyfikacja",
-      "description": "Tworzę spójną identyfikację wizualną, która buduje rozpoznawalność marki i zaufanie wśród klientów.",
-      "button_text": "Sprawdź ofertę",
+      "title": "Automatyzacje, dla Skalowania Biznesu",
+      "description": "W pracy lubię indywidualne i kreatywne podejście, dlatego tworzę spersonalizowane rozwiązania automatyzacji. Pomogę Ci wdrażać narzędzia, które usprawnią Twoje procesy biznesowe, oszczędzając to, co najcenniejsze – Twój czas i zasoby. Razem znajdziemy rozwiązania automatyzacji, które pomogą Ci się rozwijać i skalować swoją działalność bez dodatkowego stresu.",
+      "button_text": "Co mogę zautomatyzować w swoim biznesie?",
       "button_url": "/services",
-      "image_path": "/images/branding.webp",
+      "image_path": "src/images/automation.avif",
       "image_alt": "Elementy identyfikacji wizualnej marki"
     }
   ]
