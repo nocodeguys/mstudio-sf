@@ -1,30 +1,34 @@
 <div 
-  id="performance-bar-container" 
-  class="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-t-xl"
-  data-performance-bar
+  id="performance-metrics-container" 
+  class="w-full h-full flex items-center justify-center bg-transparent rounded-t-xl"
+  data-performance-metrics
 >
-  <canvas id="performance-bar-canvas" class="w-full h-full"></canvas>
+  <canvas id="performance-metrics-canvas" class="w-full h-full"></canvas>
 </div>
 
 <script>
   import * as THREE from 'three';
 
-  class PerformanceBar {
+  class PerformanceMetrics {
     container: HTMLElement;
     scene!: THREE.Scene;
     camera!: THREE.OrthographicCamera;
     renderer!: THREE.WebGLRenderer;
-    circle!: THREE.Mesh;
-    arc!: THREE.Mesh;
-    scoreDiv!: HTMLDivElement;
-    radius: number = 0.4;
+    metrics: {
+      name: string;
+      score: number;
+      circle: THREE.Mesh;
+      arc: THREE.Mesh;
+      scoreText: HTMLDivElement;
+      label: HTMLDivElement;
+      targetScore: number;
+      currentScore: number;
+      color: number;
+    }[] = [];
+    radius: number = 0.22;
     segments: number = 64;
-    targetScore: number = 100;
-    currentScore: number = 0;
     animationSpeed: number = 0.8;
     animationFrame: number | null = null;
-    loopAnimation: boolean = true;
-    resetDelay: number = 7000; // ms to wait before resetting animation
     isVisible: boolean = false;
     observer: IntersectionObserver | null = null;
 
@@ -36,7 +40,7 @@
 
       this.container = container;
       this.setupScene();
-      this.createElements();
+      this.createMetrics();
       this.setupIntersectionObserver();
       this.setupResizeHandler();
     }
@@ -44,7 +48,6 @@
     setupScene() {
       // Create scene
       this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color(0x111111);
       
       // Create camera
       this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -66,43 +69,115 @@
       this.renderer.setClearColor(0x000000, 0);
     }
 
-    createElements() {
-      // Create circular background
-      const circleGeometry = new THREE.CircleGeometry(this.radius, this.segments);
-      const circleMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x212121,
-        side: THREE.DoubleSide
-      });
-      this.circle = new THREE.Mesh(circleGeometry, circleMaterial);
-      this.scene.add(this.circle);
+    createMetrics() {
+      const metricsData = [
+        { name: 'Wydajność', score: 98, color: 0x0cce6b },
+        { name: 'Ułatwienia dostępu', score: 96, color: 0x0cce6b },
+        { name: 'Sprawdzone metody', score: 96, color: 0x0cce6b },
+        { name: 'SEO', score: 100, color: 0x0cce6b }
+      ];
 
-      // Create progress arc - starting empty
-      const arcGeometry = new THREE.RingGeometry(
-        this.radius - 0.05, 
-        this.radius, 
-        this.segments, 
-        1, 
-        Math.PI / 2, // Start from left (west position)
-        0 // Initially empty
-      );
-      const arcMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x0cce6b, // Google PageSpeed green color
-        side: THREE.DoubleSide
-      });
-      this.arc = new THREE.Mesh(arcGeometry, arcMaterial);
-      this.scene.add(this.arc);
+      const positions = [
+        { x: -1.1, y: 0 },  // Left
+        { x: -0.38, y: 0 }, // Middle-left
+        { x: 0.38, y: 0 },  // Middle-right
+        { x: 1.1, y: 0 }    // Right
+      ];
 
-      // Add text for the score in the center
-      this.scoreDiv = document.createElement('div');
-      this.scoreDiv.style.position = 'absolute';
-      this.scoreDiv.style.top = '50%';
-      this.scoreDiv.style.left = '50%';
-      this.scoreDiv.style.transform = 'translate(-50%, -50%)';
-      this.scoreDiv.style.color = '#0cce6b';
-      this.scoreDiv.style.fontWeight = 'bold';
-      this.scoreDiv.style.fontSize = '2rem';
-      this.scoreDiv.textContent = '0';
-      this.container.appendChild(this.scoreDiv);
+      metricsData.forEach((metric, index) => {
+        // Create circular background
+        const circleGeometry = new THREE.CircleGeometry(this.radius, this.segments);
+        const circleMaterial = new THREE.MeshBasicMaterial({ 
+          color: 0x212121,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.3
+        });
+        const circle = new THREE.Mesh(circleGeometry, circleMaterial);
+        circle.position.set(positions[index].x, positions[index].y, 0);
+        this.scene.add(circle);
+
+        // Create progress arc - starting empty
+        const arcGeometry = new THREE.RingGeometry(
+          this.radius - 0.03, 
+          this.radius, 
+          this.segments, 
+          1, 
+          Math.PI / 2, // Start from left (west position)
+          0 // Initially empty
+        );
+        const arcMaterial = new THREE.MeshBasicMaterial({ 
+          color: metric.color,
+          side: THREE.DoubleSide
+        });
+        const arc = new THREE.Mesh(arcGeometry, arcMaterial);
+        arc.position.set(positions[index].x, positions[index].y, 0.1);
+        this.scene.add(arc);
+
+        // Add text for the score in the center
+        const scoreText = document.createElement('div');
+        scoreText.style.position = 'absolute';
+        scoreText.style.color = '#0cce6b';
+        scoreText.style.fontWeight = 'bold';
+        scoreText.style.fontSize = '1.5rem';
+        scoreText.style.textAlign = 'center';
+        scoreText.textContent = '0';
+        this.container.appendChild(scoreText);
+
+        // Add label below the circle
+        const label = document.createElement('div');
+        label.style.position = 'absolute';
+        label.style.color = 'white';
+        label.style.fontSize = '0.8rem';
+        label.style.textAlign = 'center';
+        label.style.width = '80px';
+        label.textContent = metric.name;
+        this.container.appendChild(label);
+
+        // Add to metrics array
+        this.metrics.push({
+          name: metric.name,
+          score: metric.score,
+          circle,
+          arc,
+          scoreText,
+          label,
+          targetScore: metric.score,
+          currentScore: 0,
+          color: metric.color
+        });
+      });
+
+      // Position the text elements
+      this.updateTextPositions();
+    }
+
+    updateTextPositions() {
+      // Calculate positions for the text elements based on current container size
+      const containerRect = this.container.getBoundingClientRect();
+      const containerCenter = {
+        x: containerRect.width / 2,
+        y: containerRect.height / 2
+      };
+
+      const positions = [
+        { x: containerCenter.x - containerRect.width * 0.25, y: containerCenter.y },  // Left
+        { x: containerCenter.x - containerRect.width * 0.085, y: containerCenter.y }, // Middle-left
+        { x: containerCenter.x + containerRect.width * 0.085, y: containerCenter.y }, // Middle-right
+        { x: containerCenter.x + containerRect.width * 0.25, y: containerCenter.y }   // Right
+      ];
+
+      this.metrics.forEach((metric, index) => {
+        // Update score text position
+        metric.scoreText.style.left = `${positions[index].x}px`;
+        metric.scoreText.style.top = `${positions[index].y}px`;
+        metric.scoreText.style.transform = 'translate(-50%, -50%)';
+        
+        // Update label position (below the score)
+        metric.label.style.left = `${positions[index].x}px`;
+        metric.label.style.top = `${positions[index].y + 40}px`;
+        metric.label.style.transform = 'translate(-50%, 0)';
+      });
     }
 
     setupIntersectionObserver() {
@@ -116,6 +191,10 @@
             }
           } else {
             this.isVisible = false;
+            if (this.animationFrame) {
+              cancelAnimationFrame(this.animationFrame);
+              this.animationFrame = null;
+            }
           }
         });
       }, { threshold: 0.1 });
@@ -144,6 +223,9 @@
           this.camera.bottom = -1 / aspect;
         }
         this.camera.updateProjectionMatrix();
+        
+        // Update text positions
+        this.updateTextPositions();
       };
 
       // Set initial size
@@ -153,52 +235,52 @@
 
     startAnimation() {
       // Reset animation state
-      this.currentScore = 0;
-      this.scoreDiv.textContent = '0';
+      this.metrics.forEach(metric => {
+        metric.currentScore = 0;
+        metric.scoreText.textContent = '0';
+      });
       
       // Start the animation loop
       this.animate();
     }
 
-    resetAnimation() {
-      // Pause briefly before restarting
-      setTimeout(() => {
-        if (this.isVisible) {
-          this.startAnimation();
-        }
-      }, this.resetDelay);
-    }
-
     animate = () => {
       this.animationFrame = requestAnimationFrame(this.animate);
+      
+      let allComplete = true;
 
-      if (this.currentScore < this.targetScore) {
-        this.currentScore += this.animationSpeed;
-        if (this.currentScore > this.targetScore) {
-          this.currentScore = this.targetScore;
+      this.metrics.forEach(metric => {
+        if (metric.currentScore < metric.targetScore) {
+          allComplete = false;
           
-          // If looping is enabled, reset after delay
-          if (this.loopAnimation) {
-            this.resetAnimation();
+          metric.currentScore += this.animationSpeed;
+          if (metric.currentScore > metric.targetScore) {
+            metric.currentScore = metric.targetScore;
           }
+
+          // Update the score text
+          metric.scoreText.textContent = Math.floor(metric.currentScore).toString();
+
+          // Update the progress arc
+          this.scene.remove(metric.arc);
+          const progress = metric.currentScore / 100;
+          const newArcGeometry = new THREE.RingGeometry(
+            this.radius - 0.03, 
+            this.radius, 
+            this.segments, 
+            1, 
+            Math.PI / 2, // Start from left (west)
+            Math.PI * 2 * progress // Clockwise progress
+          );
+          metric.arc.geometry = newArcGeometry;
+          this.scene.add(metric.arc);
         }
+      });
 
-        // Update the score text
-        this.scoreDiv.textContent = Math.floor(this.currentScore).toString();
-
-        // Update the progress arc - going clockwise from the left (3 o'clock position)
-        this.scene.remove(this.arc);
-        const progress = this.currentScore / 100;
-        const newArcGeometry = new THREE.RingGeometry(
-          this.radius - 0.05, 
-          this.radius, 
-          this.segments, 
-          1, 
-          Math.PI / 2, // Start from left (west)
-          Math.PI * 2 * progress // Clockwise progress
-        );
-        this.arc.geometry = newArcGeometry;
-        this.scene.add(this.arc);
+      if (allComplete && this.animationFrame) {
+        // Optional - stop animation when all circles are complete
+        // cancelAnimationFrame(this.animationFrame);
+        // this.animationFrame = null;
       }
 
       this.renderer.render(this.scene, this.camera);
@@ -212,9 +294,15 @@
       if (this.observer) {
         this.observer.disconnect();
       }
-      if (this.container && this.scoreDiv) {
-        this.container.removeChild(this.scoreDiv);
-      }
+      
+      // Remove all DOM elements we created
+      this.metrics.forEach(metric => {
+        if (this.container) {
+          if (metric.scoreText) this.container.removeChild(metric.scoreText);
+          if (metric.label) this.container.removeChild(metric.label);
+        }
+      });
+      
       if (this.renderer) {
         this.renderer.dispose();
       }
@@ -224,21 +312,21 @@
     }
   }
 
-  // Initialize performance bars when the DOM is loaded
+  // Initialize performance metrics when the DOM is loaded
   document.addEventListener('DOMContentLoaded', () => {
-    // Find all performance bar containers
-    const containers = document.querySelectorAll('[data-performance-bar]');
+    // Find all performance metrics containers
+    const containers = document.querySelectorAll('[data-performance-metrics]');
     
-    // Initialize each performance bar
+    // Initialize each performance metrics
     containers.forEach((container, index) => {
-      const containerId = container.id || `performance-bar-container-${index}`;
+      const containerId = container.id || `performance-metrics-container-${index}`;
       // Set ID if not already set
       if (!container.id) {
         container.id = containerId;
       }
       
-      // Create and initialize the performance bar
-      new PerformanceBar(containerId);
+      // Create and initialize the performance metrics
+      new PerformanceMetrics(containerId);
     });
   });
 </script> 
