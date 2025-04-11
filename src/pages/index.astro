@@ -7,6 +7,7 @@ import ClientsSection from "@components/sections/landing/ClientsSection.astro";
 import ServicesCardSection from "@components/sections/landing/ServicesCardSection.astro";
 import FeaturesGeneral from "@components/sections/features/FeaturesGeneral.astro";
 import FeaturesNavs from "@components/sections/features/FeaturesNavs.astro";
+import FeaturesCards from "@components/sections/features/FeaturesCards.astro";
 import TestimonialsSection from "@components/sections/testimonials/TestimonialsSection.astro";
 import PricingSection from "@components/sections/pricing/PricingSection.astro";
 import FAQ from "@components/sections/misc/FAQ.astro";
@@ -17,6 +18,7 @@ import faqs from "@data/pl/faqs.json";
 import features from "@data/pl/features.json";
 import pricing from "@data/pl/pricing.json";
 import cardsSection from "@/data_files/pl/cards_section.json";
+import featureCards from "@/data_files/pl/feature_cards.json";
 import featureImage from "@images/features-image.avif";
 import construction from "@images/construction-image.avif";
 import tools from "@images/automated-tools.avif";
@@ -36,17 +38,18 @@ const avatarSrcs: Array<string> = [
 const docsUrl = getRelativeLocaleUrl("pl", "guides");
 ---
 
-<MainLayout title="ScrewFast: Narzędzia Budowlane, Sprzęt i Usługi" lang="pl">
-  <!-- <AnnouncementBanner
+<MainLayout title="mstudio: Projektowanie i tworzenie stron w technologii no-code" lang="pl">
+  {/* 
+  <AnnouncementBanner
     btnId="dismiss-button"
-    btnTitle="Sprawdź ScrewFast na GitHub"
-    url="https://github.com/mearashadowfax/ScrewFast"
-  /> -->
+    btnTitle="Sprawdź mstudio na GitHub"
+    url="https://github.com/mearashadowfax/mstudio"
+  /> 
+  */}
 
   <AnimatedHero>
     <HeroSection
-      title=`Stwórzmy <span
-          class="text-yellow-500 dark:text-yellow-400"> design, stronę, produkt</span> który opowie Twoją historię` 
+      title="Stwórzmy <span class='text-yellow-500 dark:text-yellow-400'> design, stronę, produkt</span> który opowie Twoją historię"
       subTitle="Studio designu, gdzie projektuję z osobistym akcentem, który konwertuje, angażuje i zostaje w pamięci."
       primaryBtn="Jak mogę pomóc?"
       primaryBtnURL="/products"
@@ -54,23 +57,32 @@ const docsUrl = getRelativeLocaleUrl("pl", "guides");
       secondaryBtnURL="/contact"
       withReview={false}
       avatars={avatarSrcs}
-      rating=`<span class="font-bold">4.8</span> / 5`
+      rating="<span class='font-bold'>4.8</span> / 5"
       starCount={4}
-      reviews=`Z Ponad <span class="font-bold">12.8k</span> Opinii`
+      reviews="Z Ponad <span class='font-bold'>12.8k</span> Opinii"
       src={heroImage2}
-      alt="Stos produktów ScrewFast zawierających różnorodne narzędzia sprzętowe"
+      alt="Stos produktów mstudio zawierających różnorodne narzędzia sprzętowe"
     />
   </AnimatedHero>
 
   <AnimatedSection delay={0.1} duration={0.8} blurAmount={3} distance={12}>
     <ClientsSection
-      title="Zaufali nam Liderzy Branży"
-      subTitle="Doświadcz niezawodności wybranej przez gigantów branży."
+      title="Współprace z najlepszymi"
+      subTitle="Twórcy, małe firmy, znane marki, z którymi współpracowałem"
       partners={partnersData}
     />
   </AnimatedSection>
 
-  <!-- Third section - Services Card Section -->
+  {/* Update FeaturesCards section to use the imported data */}
+  <AnimatedSection delay={0.15} duration={0.85} direction="up" distance={13} blurAmount={3.5}>
+    <FeaturesCards
+      sectionTitle={featureCards.section_title}
+      sectionSubtitle={featureCards.section_subtitle}
+      cards={featureCards.cards}
+    />
+  </AnimatedSection>
+
+  {/* Third section - Services Card Section */}
   <AnimatedSection delay={0.15} duration={0.85} direction="up" distance={13} blurAmount={3.5}>
     <ServicesCardSection 
       title={cardsSection.section_title}
@@ -82,21 +94,21 @@ const docsUrl = getRelativeLocaleUrl("pl", "guides");
   <AnimatedSection delay={0.2} duration={0.9} direction="up" distance={15} blurAmount={4}>
     <FeaturesGeneral
       title="Spełniamy Wymagania Branży"
-      subTitle="W ScrewFast podejmujemy unikalne wyzwania napotykane w sektorach sprzętu i budownictwa. Od najnowocześniejszych narzędzi po fachowe usługi, jesteśmy zaangażowani w pomoc w pokonywaniu przeszkód i osiąganiu celów."
+      subTitle="W mstudio podejmujemy unikalne wyzwania napotykane w sektorach sprzętu i budownictwa. Od najnowocześniejszych narzędzi po fachowe usługi, jesteśmy zaangażowani w pomoc w pokonywaniu przeszkód i osiąganiu celów."
       src={featureImage}
-      alt="Produkty ScrewFast w unoszących się pudełkach"
+      alt="Produkty mstudio w unoszących się pudełkach"
       features={features}
     />
   </AnimatedSection>
 
   <AnimatedSection delay={0.15} duration={1} direction="up" distance={14} blurAmount={5}>
     <FeaturesNavs
-      title=`Dostosuj ofertę <span class="text-yellow-500 dark:text-yellow-400">ScrewFast</span>, aby idealnie odpowiadała Twoim potrzebom sprzętowym i budowlanym.`
+      title="Dostosuj ofertę <span class='text-yellow-500 dark:text-yellow-400'>mstudio</span>, aby idealnie odpowiadała Twoim potrzebom sprzętowym i budowlanym."
       tabs={[
         {
           heading: "Najnowocześniejsze Narzędzia",
           content:
-            "Wzmocnij swoje projekty dzięki najnowocześniejszym narzędziom ScrewFast. Doświadcz zwiększonej wydajności w zarządzaniu budową dzięki naszym zaawansowanym zautomatyzowanym rozwiązaniom.",
+            "Wzmocnij swoje projekty dzięki najnowocześniejszym narzędziom mstudio. Doświadcz zwiększonej wydajności w zarządzaniu budową dzięki naszym zaawansowanym zautomatyzowanym rozwiązaniom.",
           svg: "tools",
           src: tools,
           alt: "Żółty i czarny ciężki sprzęt na brązowym trawiastym polu",
@@ -105,7 +117,7 @@ const docsUrl = getRelativeLocaleUrl("pl", "guides");
         {
           heading: "Intuicyjne Panele",
           content:
-            "Nawiguj z łatwością dzięki intuicyjnym panelom ScrewFast. Konfiguruj i nadzoruj swoje projekty bez wysiłku, dzięki przyjaznym dla użytkownika interfejsom zaprojektowanym do szybkiego i skutecznego zarządzania przepływem pracy.",
+            "Nawiguj z łatwością dzięki intuicyjnym panelom mstudio. Konfiguruj i nadzoruj swoje projekty bez wysiłku, dzięki przyjaznym dla użytkownika interfejsom zaprojektowanym do szybkiego i skutecznego zarządzania przepływem pracy.",
           svg: "dashboard",
           src: dashboard,
           alt: "Zrzut ekranu lub graficzna reprezentacja intuicyjnego panelu",
@@ -114,7 +126,7 @@ const docsUrl = getRelativeLocaleUrl("pl", "guides");
         {
           heading: "Solidne Funkcje",
           content:
-            "Zminimalizuj złożoność, zmaksymalizuj produktywność. Solidne funkcje ScrewFast są zaprojektowane tak, aby usprawnić proces budowy, dostarczając wyniki, które wyróżniają się doskonałością.",
+            "Zminimalizuj złożoność, zmaksymalizuj produktywność. Solidne funkcje mstudio są zaprojektowane tak, aby usprawnić proces budowy, dostarczając wyniki, które wyróżniają się doskonałością.",
           svg: "house",
           src: construction,
           alt: "Szara metalowa rama budynku w pobliżu żurawia wieżowego w ciągu dnia",
@@ -126,12 +138,12 @@ const docsUrl = getRelativeLocaleUrl("pl", "guides");
   <AnimatedSection delay={0.1} duration={0.8} direction="up" distance={13} blurAmount={3.5}>
     <TestimonialsSection
       title="Przyspiesz Swoje Projekty"
-      subTitle="W ScrewFast zapewniamy szybki start dzięki natychmiastowej konfiguracji konta. Doświadcz na nowo zdefiniowanej szybkości w budownictwie."
+      subTitle="W mstudio zapewniamy szybki start dzięki natychmiastowej konfiguracji konta. Doświadcz na nowo zdefiniowanej szybkości w budownictwie."
       testimonials={[
         {
           content:
-            "ScrewFast dramatycznie zwiększył wydajność naszego projektu. Konfiguracja była natychmiastowa, a ich szybki czas reakcji jest fenomenalny. Prawdziwy przełom we wsparciu sprzętowym i budowlanym!",
-          author: "Samantha Ruiz",
+            "mstudio dramatycznie zwiększył wydajność naszego projektu. Konfiguracja była natychmiastowa, a ich szybki czas reakcji jest fenomenalny. Prawdziwy przełom we wsparciu sprzętowym i budowlanym!",
+          author: "Maciej Wisniewski",
           role: "Dyrektor Operacyjny | ConstructIt Inc.",
           avatarSrc:
             "https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?q=80&w=1453&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80",
@@ -146,7 +158,7 @@ const docsUrl = getRelativeLocaleUrl("pl", "guides");
         {
           count: "35%",
           description:
-            "wzrost wydajności projektu dzięki narzędziom i usługom ScrewFast",
+            "wzrost wydajności projektu dzięki narzędziom i usługom mstudio",
         },
         {
           count: "15.3%",
@@ -172,8 +184,8 @@ const docsUrl = getRelativeLocaleUrl("pl", "guides");
   <AnimatedHero>
     <HeroSectionAlt
       title="Budujmy Razem"
-      subTitle="ScrewFast to szablon open-source, starannie stworzony z wykorzystaniem frameworków Astro, Tailwind CSS i Preline UI."
-      url="https://github.com/mearashadowfax/ScrewFast"
+      subTitle="mstudio to szablon open-source, starannie stworzony z wykorzystaniem frameworków Astro, Tailwind CSS i Preline UI."
+      url="https://github.com/mearashadowfax/mstudio"
     />
   </AnimatedHero>
 </MainLayout>

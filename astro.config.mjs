@@ -9,7 +9,7 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   // https://docs.astro.build/en/guides/images/#authorizing-remote-images
-  site: "https://screwfast.uk",
+  site: "https://mstudio.uk",
   image: {
     domains: ["images.unsplash.com"],
   },
@@ -30,7 +30,7 @@ export default defineConfig({
     react(),
     sitemap({
     i18n: {
-      defaultLocale: "pl", // All urls that don't contain `en` after `https://screwfast.uk/` will be treated as default locale, i.e. `pl`
+      defaultLocale: "pl", // All urls that don't contain `en` after `https://mstudio.uk/` will be treated as default locale, i.e. `pl`
       locales: {
         pl: "pl", // The `defaultLocale` value must present in `locales` keys
         en: "en",
@@ -38,7 +38,7 @@ export default defineConfig({
       },
     },
   }), starlight({
-    title: "ScrewFast Docs",
+    title: "mstudio Docs",
     defaultLocale: "root",
     // https://github.com/withastro/starlight/blob/main/packages/starlight/CHANGELOG.md
     // If no Astro and Starlight i18n configurations are provided, the built-in default locale is used in Starlight and a matching Astro i18n configuration is generated/used.
@@ -79,7 +79,7 @@ export default defineConfig({
       },
     ],
     social: {
-      github: "https://github.com/mearashadowfax/ScrewFast",
+      github: "https://github.com/mearashadowfax/mstudio",
     },
     disable404Route: true,
     customCss: ["./src/assets/styles/starlight.css"],
@@ -95,14 +95,14 @@ export default defineConfig({
         tag: "meta",
         attrs: {
           property: "og:image",
-          content: "https://screwfast.uk" + "/social.webp",
+          content: "https://mstudio.uk" + "/social.webp",
         },
       },
       {
         tag: "meta",
         attrs: {
           property: "twitter:image",
-          content: "https://screwfast.uk" + "/social.webp",
+          content: "https://mstudio.uk" + "/social.webp",
         },
       },
     ],

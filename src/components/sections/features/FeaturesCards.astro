@@ -1,0 +1,102 @@
+---
+// Import the necessary dependencies
+import { Image } from "astro:assets";
+import Icon from "@components/ui/icons/Icon.astro";
+import PerformanceBar from "@components/threejs/PerformanceBar.astro";
+import BlocksVisualization from "@components/threejs/BlocksVisualization.astro";
+
+interface FeatureCard {
+  tagline: string;
+  heading: string;
+  description: string;
+  media: {
+    type: string;
+    src: string;
+    alt?: string;
+  };
+}
+
+interface Props {
+  sectionTitle?: string;
+  sectionSubtitle?: string;
+  cards?: FeatureCard[];
+}
+
+// Define props from Astro
+const { sectionTitle, sectionSubtitle, cards = [] } = Astro.props;
+---
+
+<section class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full">
+  <!-- Section header -->
+  {
+    (sectionTitle || sectionSubtitle) && (
+      <div class="mx-auto max-w-2xl text-center mb-10 lg:mb-14">
+        {sectionTitle && (
+          <h2 class="text-2xl font-bold md:text-3xl text-neutral-800 dark:text-neutral-200">
+            {sectionTitle}
+          </h2>
+        )}
+        {sectionSubtitle && (
+          <p class="mt-3 text-neutral-600 dark:text-neutral-400">
+            {sectionSubtitle}
+          </p>
+        )}
+      </div>
+    )
+  }
+
+  <!-- Cards grid -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      cards.map((card) => (
+        <div class="group flex flex-col h-full bg-white border border-neutral-200 shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-700 dark:shadow-neutral-700/[.7]">
+          <!-- Card Media -->
+          <div class="relative h-52 overflow-hidden rounded-t-xl">
+            {card.media.type === "image" && (
+              <Image
+                src={card.media.src}
+                alt={card.media.alt || card.heading}
+                class="h-full w-full object-cover object-center"
+                width={400}
+                height={200}
+                format="avif"
+              />
+            )}
+            {card.media.type === "video" && (
+              <video
+                src={card.media.src}
+                autoplay
+                loop
+                muted
+                class="h-full w-full object-cover object-center"
+              />
+            )}
+            {card.media.type === "threejs" && card.media.src === "seo-performance-visualization" && (
+              <div class="h-full w-full">
+                <PerformanceBar />
+              </div>
+            )}
+            {card.media.type === "threejs" && card.media.src === "no-code-visualization" && (
+              <div class="h-full w-full">
+                <BlocksVisualization />
+              </div>
+            )}
+          </div>
+          
+          <!-- Card Content -->
+          <div class="p-4 md:p-6">
+            <span class="block mb-1 text-xs font-semibold uppercase text-blue-600 dark:text-blue-500">
+              {card.tagline}
+            </span>
+            <h3 class="text-xl font-semibold text-neutral-800 dark:text-neutral-200">
+              {card.heading}
+            </h3>
+            <p class="mt-3 text-neutral-600 dark:text-neutral-400">
+              {card.description}
+            </p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section> 

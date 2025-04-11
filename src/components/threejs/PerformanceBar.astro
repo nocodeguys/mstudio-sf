@@ -1,0 +1,244 @@
+<div 
+  id="performance-bar-container" 
+  class="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-t-xl"
+  data-performance-bar
+>
+  <canvas id="performance-bar-canvas" class="w-full h-full"></canvas>
+</div>
+
+<script>
+  import * as THREE from 'three';
+
+  class PerformanceBar {
+    container: HTMLElement;
+    scene!: THREE.Scene;
+    camera!: THREE.OrthographicCamera;
+    renderer!: THREE.WebGLRenderer;
+    circle!: THREE.Mesh;
+    arc!: THREE.Mesh;
+    scoreDiv!: HTMLDivElement;
+    radius: number = 0.4;
+    segments: number = 64;
+    targetScore: number = 100;
+    currentScore: number = 0;
+    animationSpeed: number = 0.8;
+    animationFrame: number | null = null;
+    loopAnimation: boolean = true;
+    resetDelay: number = 7000; // ms to wait before resetting animation
+    isVisible: boolean = false;
+    observer: IntersectionObserver | null = null;
+
+    constructor(containerId: string) {
+      const container = document.getElementById(containerId);
+      if (!container) {
+        throw new Error(`Container with ID ${containerId} not found`);
+      }
+
+      this.container = container;
+      this.setupScene();
+      this.createElements();
+      this.setupIntersectionObserver();
+      this.setupResizeHandler();
+    }
+
+    setupScene() {
+      // Create scene
+      this.scene = new THREE.Scene();
+      this.scene.background = new THREE.Color(0x111111);
+      
+      // Create camera
+      this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+      this.camera.position.z = 1;
+
+      // Create renderer
+      const canvas = this.container.querySelector('canvas') as HTMLCanvasElement;
+      this.renderer = new THREE.WebGLRenderer({ 
+        canvas: canvas,
+        antialias: true,
+        alpha: true
+      });
+      
+      // Make renderer responsive
+      this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      
+      // Make the scene background transparent
+      this.renderer.setClearColor(0x000000, 0);
+    }
+
+    createElements() {
+      // Create circular background
+      const circleGeometry = new THREE.CircleGeometry(this.radius, this.segments);
+      const circleMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x212121,
+        side: THREE.DoubleSide
+      });
+      this.circle = new THREE.Mesh(circleGeometry, circleMaterial);
+      this.scene.add(this.circle);
+
+      // Create progress arc - starting empty
+      const arcGeometry = new THREE.RingGeometry(
+        this.radius - 0.05, 
+        this.radius, 
+        this.segments, 
+        1, 
+        Math.PI / 2, // Start from left (west position)
+        0 // Initially empty
+      );
+      const arcMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x0cce6b, // Google PageSpeed green color
+        side: THREE.DoubleSide
+      });
+      this.arc = new THREE.Mesh(arcGeometry, arcMaterial);
+      this.scene.add(this.arc);
+
+      // Add text for the score in the center
+      this.scoreDiv = document.createElement('div');
+      this.scoreDiv.style.position = 'absolute';
+      this.scoreDiv.style.top = '50%';
+      this.scoreDiv.style.left = '50%';
+      this.scoreDiv.style.transform = 'translate(-50%, -50%)';
+      this.scoreDiv.style.color = '#0cce6b';
+      this.scoreDiv.style.fontWeight = 'bold';
+      this.scoreDiv.style.fontSize = '2rem';
+      this.scoreDiv.textContent = '0';
+      this.container.appendChild(this.scoreDiv);
+    }
+
+    setupIntersectionObserver() {
+      // Create an IntersectionObserver to detect when the container is visible
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.isVisible = true;
+            if (!this.animationFrame) {
+              this.startAnimation();
+            }
+          } else {
+            this.isVisible = false;
+          }
+        });
+      }, { threshold: 0.1 });
+
+      // Start observing the container
+      this.observer.observe(this.container);
+    }
+
+    setupResizeHandler() {
+      // Adjust size on window resize
+      const onResize = () => {
+        // Update renderer
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+        
+        // Keep the aspect ratio correct
+        const aspect = this.container.clientWidth / this.container.clientHeight;
+        if (aspect > 1) {
+          this.camera.left = -aspect;
+          this.camera.right = aspect;
+          this.camera.top = 1;
+          this.camera.bottom = -1;
+        } else {
+          this.camera.left = -1;
+          this.camera.right = 1;
+          this.camera.top = 1 / aspect;
+          this.camera.bottom = -1 / aspect;
+        }
+        this.camera.updateProjectionMatrix();
+      };
+
+      // Set initial size
+      onResize();
+      window.addEventListener('resize', onResize);
+    }
+
+    startAnimation() {
+      // Reset animation state
+      this.currentScore = 0;
+      this.scoreDiv.textContent = '0';
+      
+      // Start the animation loop
+      this.animate();
+    }
+
+    resetAnimation() {
+      // Pause briefly before restarting
+      setTimeout(() => {
+        if (this.isVisible) {
+          this.startAnimation();
+        }
+      }, this.resetDelay);
+    }
+
+    animate = () => {
+      this.animationFrame = requestAnimationFrame(this.animate);
+
+      if (this.currentScore < this.targetScore) {
+        this.currentScore += this.animationSpeed;
+        if (this.currentScore > this.targetScore) {
+          this.currentScore = this.targetScore;
+          
+          // If looping is enabled, reset after delay
+          if (this.loopAnimation) {
+            this.resetAnimation();
+          }
+        }
+
+        // Update the score text
+        this.scoreDiv.textContent = Math.floor(this.currentScore).toString();
+
+        // Update the progress arc - going clockwise from the left (3 o'clock position)
+        this.scene.remove(this.arc);
+        const progress = this.currentScore / 100;
+        const newArcGeometry = new THREE.RingGeometry(
+          this.radius - 0.05, 
+          this.radius, 
+          this.segments, 
+          1, 
+          Math.PI / 2, // Start from left (west)
+          Math.PI * 2 * progress // Clockwise progress
+        );
+        this.arc.geometry = newArcGeometry;
+        this.scene.add(this.arc);
+      }
+
+      this.renderer.render(this.scene, this.camera);
+    };
+
+    cleanup() {
+      // Clean up resources
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+      }
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+      if (this.container && this.scoreDiv) {
+        this.container.removeChild(this.scoreDiv);
+      }
+      if (this.renderer) {
+        this.renderer.dispose();
+      }
+      if (this.scene) {
+        this.scene.clear();
+      }
+    }
+  }
+
+  // Initialize performance bars when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Find all performance bar containers
+    const containers = document.querySelectorAll('[data-performance-bar]');
+    
+    // Initialize each performance bar
+    containers.forEach((container, index) => {
+      const containerId = container.id || `performance-bar-container-${index}`;
+      // Set ID if not already set
+      if (!container.id) {
+        container.id = containerId;
+      }
+      
+      // Create and initialize the performance bar
+      new PerformanceBar(containerId);
+    });
+  });
+</script> 

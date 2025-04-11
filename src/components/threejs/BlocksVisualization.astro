@@ -1,0 +1,231 @@
+---
+---
+
+<div 
+  id="blocks-visualization-container" 
+  class="w-full h-full bg-neutral-100 dark:bg-neutral-800 rounded-t-xl"
+  data-blocks-visualization
+>
+  <canvas id="blocks-visualization-canvas" class="w-full h-full"></canvas>
+</div>
+
+<script>
+  import * as THREE from 'three';
+
+  class BlocksVisualization {
+    container: HTMLElement;
+    scene!: THREE.Scene;
+    camera!: THREE.PerspectiveCamera;
+    renderer!: THREE.WebGLRenderer;
+    blocks: THREE.Mesh<THREE.BoxGeometry, THREE.MeshLambertMaterial>[] = [];
+    animationFrame: number | null = null;
+    isVisible: boolean = false;
+    observer: IntersectionObserver | null = null;
+    
+    constructor(containerId: string) {
+      const container = document.getElementById(containerId);
+      if (!container) {
+        throw new Error(`Container with ID ${containerId} not found`);
+      }
+      
+      this.container = container;
+      this.setupScene();
+      this.createBlocks();
+      this.setupLighting();
+      this.setupIntersectionObserver();
+      this.setupResizeHandler();
+    }
+    
+    setupScene() {
+      // Create scene
+      this.scene = new THREE.Scene();
+      this.scene.background = new THREE.Color(0x111827); // Dark background
+      
+      // Create camera
+      this.camera = new THREE.PerspectiveCamera(
+        75,
+        this.container.clientWidth / this.container.clientHeight,
+        0.1,
+        1000
+      );
+      this.camera.position.z = 5;
+      
+      // Create renderer
+      const canvas = this.container.querySelector('canvas') as HTMLCanvasElement;
+      this.renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true
+      });
+      
+      // Make renderer responsive
+      this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+    }
+    
+    createBlocks() {
+      // Block colors for no-code visualization
+      const blockColors = [
+        0x3B82F6, // blue
+        0x10B981, // emerald
+        0xF59E0B, // amber
+        0xEF4444, // red
+        0x8B5CF6, // purple
+        0xEC4899  // pink
+      ];
+      
+      const blockCount = 12;
+      
+      for (let i = 0; i < blockCount; i++) {
+        // Create a block with random dimensions
+        const width = 0.5 + Math.random() * 0.5;
+        const height = 0.5 + Math.random() * 0.5;
+        const depth = 0.5 + Math.random() * 0.5;
+        
+        const geometry = new THREE.BoxGeometry(width, height, depth);
+        const material = new THREE.MeshLambertMaterial({
+          color: blockColors[Math.floor(Math.random() * blockColors.length)],
+          transparent: true,
+          opacity: 0.8
+        });
+        
+        const block = new THREE.Mesh(geometry, material);
+        
+        // Position blocks in a grid-like pattern
+        const gridSize = Math.ceil(Math.sqrt(blockCount));
+        const spacing = 1.5;
+        const xOffset = -((gridSize - 1) * spacing) / 2;
+        const yOffset = -((gridSize - 1) * spacing) / 2;
+        
+        const col = i % gridSize;
+        const row = Math.floor(i / gridSize);
+        
+        block.position.x = xOffset + col * spacing;
+        block.position.y = yOffset + row * spacing;
+        block.position.z = -Math.random() * 2; // Random depth
+        
+        // Set random rotation
+        block.rotation.x = Math.random() * Math.PI;
+        block.rotation.y = Math.random() * Math.PI;
+        
+        // Store initial position for animation
+        block.userData = {
+          initialPosition: block.position.clone(),
+          speedFactor: 0.5 + Math.random() * 0.5,
+          rotationSpeed: {
+            x: (Math.random() - 0.5) * 0.02,
+            y: (Math.random() - 0.5) * 0.02
+          }
+        };
+        
+        this.scene.add(block);
+        this.blocks.push(block);
+      }
+    }
+    
+    setupLighting() {
+      // Add lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      this.scene.add(ambientLight);
+      
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(1, 1, 1);
+      this.scene.add(directionalLight);
+    }
+    
+    setupIntersectionObserver() {
+      // Create an IntersectionObserver to detect when the container is visible
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.isVisible = true;
+            if (!this.animationFrame) {
+              this.startAnimation();
+            }
+          } else {
+            this.isVisible = false;
+            if (this.animationFrame) {
+              cancelAnimationFrame(this.animationFrame);
+              this.animationFrame = null;
+            }
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      // Start observing the container
+      this.observer.observe(this.container);
+    }
+    
+    setupResizeHandler() {
+      // Adjust size on window resize
+      const onResize = () => {
+        // Update renderer
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+        
+        // Update camera aspect ratio
+        this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
+        this.camera.updateProjectionMatrix();
+      };
+      
+      // Set initial size
+      onResize();
+      window.addEventListener('resize', onResize);
+    }
+    
+    startAnimation() {
+      // Start the animation loop
+      this.animate();
+    }
+    
+    animate = () => {
+      this.animationFrame = requestAnimationFrame(this.animate);
+      
+      // Animate blocks
+      this.blocks.forEach(block => {
+        // Rotate blocks
+        block.rotation.x += block.userData.rotationSpeed.x;
+        block.rotation.y += block.userData.rotationSpeed.y;
+        
+        // Float blocks up and down in a sine wave pattern
+        const time = Date.now() * 0.001;
+        const initialY = block.userData.initialPosition.y;
+        block.position.y = initialY + Math.sin(time * block.userData.speedFactor) * 0.2;
+      });
+      
+      this.renderer.render(this.scene, this.camera);
+    };
+    
+    cleanup() {
+      // Clean up resources
+      if (this.animationFrame) {
+        cancelAnimationFrame(this.animationFrame);
+      }
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+      if (this.renderer) {
+        this.renderer.dispose();
+      }
+      if (this.scene) {
+        this.scene.clear();
+      }
+    }
+  }
+  
+  // Initialize blocks visualizations when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Find all blocks visualization containers
+    const containers = document.querySelectorAll('[data-blocks-visualization]');
+    
+    // Initialize each blocks visualization
+    containers.forEach((container, index) => {
+      const containerId = container.id || `blocks-visualization-container-${index}`;
+      // Set ID if not already set
+      if (!container.id) {
+        container.id = containerId;
+      }
+      
+      // Create and initialize the blocks visualization
+      new BlocksVisualization(containerId);
+    });
+  });
+</script> 

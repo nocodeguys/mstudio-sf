@@ -1,0 +1,63 @@
+{
+  "section_title": "Odpowiadamy na obecne potrzeby Internetu",
+  "section_subtitle": "Kompleksowe rozwiązania cyfrowe dopasowane do Twoich potrzeb i celów.",
+  "cards": [
+    {
+      "tagline": "Design",
+      "heading": "UX & UI Design",
+      "description": "Projektujemy strony www i aplikacje: od koncepcji, przez makiety funkcjonalne, aż po pełen projekt graficzny.",
+      "media": {
+        "type": "image",
+        "src": "/images/features/ui-design.jpg",
+        "alt": "UI Design illustration"
+      }
+    },
+    {
+      "tagline": "Animacje",
+      "heading": "Interaktywne Animacje",
+      "description": "Stawiamy na animacje i interakcje, które nie tylko uatrakcyjniają projekt, ale również wspierają dobry UX.",
+      "media": {
+        "type": "video",
+        "src": "/videos/animation-demo.mp4"
+      }
+    },
+    {
+      "tagline": "Integracje",
+      "heading": "API i Integracje",
+      "description": "Wybieramy i integrujemy te narzędzia, które pomagają nam w realizacji celów danego projektu.",
+      "media": {
+        "type": "image",
+        "src": "/images/features/api-integration.jpg",
+        "alt": "API Integration visualization"
+      }
+    },
+    {
+      "tagline": "CMS",
+      "heading": "Zarządzanie Treścią",
+      "description": "Wdrażamy strony www, którymi możesz samodzielnie zarządzać dzięki przyjaznemu i intuicyjnemu CMS.",
+      "media": {
+        "type": "image",
+        "src": "/images/features/cms.jpg",
+        "alt": "CMS dashboard"
+      }
+    },
+    {
+      "tagline": "SEO",
+      "heading": "Optymalizacja SEO",
+      "description": "Przeprowadzamy optymalizację SEO on-site, dbając o wysokie wyniki (100/100) w PageSpeed Insights i przyjazność dla wyszukiwarek.",
+      "media": {
+        "type": "threejs",
+        "src": "seo-performance-visualization"
+      }
+    },
+    {
+      "tagline": "No-code",
+      "heading": "Rozwiązania No-code",
+      "description": "Dzięki narzędziom no-code skupiamy się na tym, co ważne i oszczędzamy czas, zamieniając miesiące w tygodnie.",
+      "media": {
+        "type": "threejs",
+        "src": "no-code-visualization"
+      }
+    }
+  ]
+} 
