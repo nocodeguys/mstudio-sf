@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import Icon from "@components/ui/icons/Icon.astro";
 import PerformanceBar from "@components/threejs/PerformanceBar.astro";
 import BlocksVisualization from "@components/threejs/BlocksVisualization.astro";
+import ApiIntegrationFlow from "@components/threejs/ApiIntegrationFlow.astro";
 
 interface FeatureCard {
   tagline: string;
@@ -79,6 +80,11 @@ const { sectionTitle, sectionSubtitle, cards = [] } = Astro.props;
             {card.media.type === "threejs" && card.media.src === "no-code-visualization" && (
               <div class="h-full w-full">
                 <BlocksVisualization />
+              </div>
+            )}
+            {card.media.type === "threejs" && card.media.src === "api-integration-flow" && (
+              <div class="h-full w-full">
+                <ApiIntegrationFlow />
               </div>
             )}
           </div>

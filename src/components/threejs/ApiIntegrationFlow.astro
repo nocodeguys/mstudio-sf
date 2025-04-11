@@ -1,0 +1,214 @@
+---
+// Component Props
+interface Props {
+  width?: number;
+  height?: number;
+}
+
+const { width = 800, height = 400 } = Astro.props;
+
+// Import local SVG files correctly (place these files in the src/assets directory)
+import webflowIcon from '../../images/icons/webflow.svg';
+import n8nIcon from '../../images/icons/n8n.svg';
+import gmailIcon from '../../images/icons/Gmail.svg';
+import airtableIcon from '../../images/icons/airtable.svg';
+---
+
+<div class="w-full h-full relative overflow-hidden">
+  <div id="api-integration-flow" class="w-full h-full">
+    <!-- Icons will be positioned absolutely -->
+    <div class="api-node source-node">
+      <img src={webflowIcon.src} alt="Source" width="40" height="40" />
+    </div>
+    <div class="api-node central-node">
+      <img src={n8nIcon.src} alt="Central" width="45" height="45" />
+    </div>
+    <div class="api-node target-node-1">
+      <img src={gmailIcon.src} alt="Target 1" width="40" height="40" />
+    </div>
+    <div class="api-node target-node-2">
+      <img src={airtableIcon.src} alt="Target 2" width="40" height="40" />
+    </div>
+    <svg id="flow-lines" class="flow-lines" width="100%" height="100%">
+      <!-- Lines will be added by JavaScript -->
+    </svg>
+  </div>
+</div>
+
+<script>
+  // Wait for the DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Get the container and create the SVG paths
+    const container = document.getElementById('api-integration-flow');
+    const svg = document.getElementById('flow-lines');
+    if (!container || !svg) return;
+
+    // Reference to all nodes
+    const sourceNode = container.querySelector('.source-node');
+    const centralNode = container.querySelector('.central-node');
+    const targetNode1 = container.querySelector('.target-node-1');
+    const targetNode2 = container.querySelector('.target-node-2');
+
+    // Create flow lines
+    const createFlowLine = (id: string, color: string) => {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('id', id);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', color);
+      path.setAttribute('stroke-width', '2');
+      svg.appendChild(path);
+      return path;
+    };
+
+    // Create our flow lines
+    const sourceToCentralLine = createFlowLine('source-to-central', '#3b82f6'); // Blue
+    const centralToTarget1Line = createFlowLine('central-to-target1', '#ef4444'); // Red
+    const centralToTarget2Line = createFlowLine('central-to-target2', '#10b981'); // Green
+
+    // Create animated circles that travel along paths
+    const createFlowParticle = (pathId: string, color: string) => {
+      const element = document.getElementById(pathId);
+      // Make sure it's an SVG path element
+      if (!element || !(element instanceof SVGPathElement)) return;
+      
+      const path = element;
+
+      // Create circle
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('r', '4');
+      circle.setAttribute('fill', color);
+      
+      // Append to SVG
+      svg.appendChild(circle);
+      
+      // Animation variables
+      let progress = 0;
+      const speed = 0.005;
+      
+      // Update circle position
+      const updatePosition = () => {
+        const pathLength = path.getTotalLength();
+        const point = path.getPointAtLength(progress * pathLength);
+        
+        circle.setAttribute('cx', point.x.toString());
+        circle.setAttribute('cy', point.y.toString());
+        
+        progress += speed;
+        if (progress > 1) progress = 0;
+        
+        requestAnimationFrame(updatePosition);
+      };
+      
+      updatePosition();
+    };
+
+    // Update path coordinates based on node positions
+    const updatePaths = () => {
+      // Get the center positions of each node
+      const getNodeCenter = (node: Element | null) => {
+        if (!node) return { x: 0, y: 0 };
+        const rect = node.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        return {
+          x: rect.left + rect.width / 2 - containerRect.left,
+          y: rect.top + rect.height / 2 - containerRect.top
+        };
+      };
+
+      const sourcePos = getNodeCenter(sourceNode);
+      const centralPos = getNodeCenter(centralNode);
+      const target1Pos = getNodeCenter(targetNode1);
+      const target2Pos = getNodeCenter(targetNode2);
+
+      // Create curved paths
+      const createCurvedPath = (start: {x: number, y: number}, end: {x: number, y: number}) => {
+        const midX = (start.x + end.x) / 2;
+        // Add a slight curve to the path
+        return `M ${start.x},${start.y} Q ${midX},${start.y} ${midX},${(start.y + end.y) / 2} T ${end.x},${end.y}`;
+      };
+
+      // Update the path coordinates
+      sourceToCentralLine.setAttribute('d', createCurvedPath(sourcePos, centralPos));
+      centralToTarget1Line.setAttribute('d', createCurvedPath(centralPos, target1Pos));
+      centralToTarget2Line.setAttribute('d', createCurvedPath(centralPos, target2Pos));
+    };
+
+    // Initial update of paths
+    window.addEventListener('load', () => {
+      updatePaths();
+      // Create particles after paths are set
+      createFlowParticle('source-to-central', '#3b82f6');
+      createFlowParticle('central-to-target1', '#ef4444');
+      createFlowParticle('central-to-target2', '#10b981');
+    });
+
+    // Update on window resize
+    window.addEventListener('resize', updatePaths);
+  });
+</script>
+
+<style>
+  #api-integration-flow {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: transparent;
+  }
+  
+  .api-node {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    overflow: hidden;
+    padding: 12px;
+  }
+  
+  .api-node img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .source-node {
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .central-node {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px; /* Slightly larger for the central node */
+    height: 70px;
+  }
+  
+  .target-node-1 {
+    right: 10%;
+    top: 30%;
+    transform: translateY(-50%);
+  }
+  
+  .target-node-2 {
+    right: 10%;
+    top: 70%;
+    transform: translateY(-50%);
+  }
+  
+  .flow-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+  }
+</style> 

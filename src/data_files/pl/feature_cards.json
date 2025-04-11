@@ -26,9 +26,8 @@
       "heading": "API i Integracje",
       "description": "Wybieramy i integrujemy te narzędzia, które pomagają nam w realizacji celów danego projektu.",
       "media": {
-        "type": "image",
-        "src": "/images/features/api-integration.jpg",
-        "alt": "API Integration visualization"
+        "type": "threejs",
+        "src": "api-integration-flow"
       }
     },
     {
